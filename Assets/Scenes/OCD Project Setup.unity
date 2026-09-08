@@ -179,7 +179,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 60
+  field of view: 50
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -206,7 +206,7 @@ Transform:
   m_GameObject: {fileID: 330585543}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: -10}
+  m_LocalPosition: {x: 0, y: 1, z: -6.68}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -471,9 +471,21 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 16274db8b248df44988a4f7b6d477d4d, type: 2}
+    - target: {fileID: 374285012785193101, guid: d639a7ed9c8d1f04e8d397a744f8f5b7, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 4.976
+      objectReference: {fileID: 0}
+    - target: {fileID: 374285012785193101, guid: d639a7ed9c8d1f04e8d397a744f8f5b7, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.744
+      objectReference: {fileID: 0}
+    - target: {fileID: 374285012785193101, guid: d639a7ed9c8d1f04e8d397a744f8f5b7, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -2.896
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: d639a7ed9c8d1f04e8d397a744f8f5b7, type: 3}
       propertyPath: m_Name
-      value: "\u043D\u0430 \u0441\u043A\u0435\u0442\u0447 \u04322"
+      value: ROOM
       objectReference: {fileID: 0}
     - target: {fileID: 1111253871970447705, guid: d639a7ed9c8d1f04e8d397a744f8f5b7, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -531,27 +543,27 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: c878d131fcc92bd42a87a34e50661f3b, type: 3}
       propertyPath: m_LocalScale.x
-      value: 6
+      value: 2.9241
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: c878d131fcc92bd42a87a34e50661f3b, type: 3}
       propertyPath: m_LocalScale.y
-      value: 6
+      value: 2.9241
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: c878d131fcc92bd42a87a34e50661f3b, type: 3}
       propertyPath: m_LocalScale.z
-      value: 6
+      value: 2.9241
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: c878d131fcc92bd42a87a34e50661f3b, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 2.1521597
+      value: 3.918
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: c878d131fcc92bd42a87a34e50661f3b, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.5745237
+      value: 0.74757
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: c878d131fcc92bd42a87a34e50661f3b, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.7478781
+      value: -5.055
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: c878d131fcc92bd42a87a34e50661f3b, type: 3}
       propertyPath: m_LocalRotation.w
@@ -587,7 +599,7 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: a76d3b09cfc5d5a47ad213063e7fd9de, type: 2}
     - target: {fileID: 919132149155446097, guid: c878d131fcc92bd42a87a34e50661f3b, type: 3}
       propertyPath: m_Name
-      value: metascan_20231219-1417_Sprinkle_Cookies2
+      value: Cookies
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
