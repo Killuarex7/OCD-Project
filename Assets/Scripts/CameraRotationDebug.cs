@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CameraRotationDebug : MonoBehaviour
 {
@@ -8,6 +9,7 @@ public class CameraRotationDebug : MonoBehaviour
 
     public float requiredTime = 5f;
     public float sensitivity = 0.1f;
+    public Slider meter;
 
     void Start()
     {
@@ -23,6 +25,7 @@ public class CameraRotationDebug : MonoBehaviour
         {
             // Camera moved, reset timer
             timer = 0f;
+            meter.value = 0f;
             hasPrinted = false;
 
             lastRotation = currentRotation;
@@ -31,6 +34,7 @@ public class CameraRotationDebug : MonoBehaviour
         {
             // Camera has not moved
             timer += Time.deltaTime;
+            meter.value = timer / requiredTime;
 
             if (timer >= requiredTime && !hasPrinted)
             {
