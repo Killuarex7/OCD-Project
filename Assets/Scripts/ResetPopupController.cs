@@ -14,17 +14,12 @@ public class ResetPopupController : MonoBehaviour
     public GameObject objectHunt;
     public GameObject memoryMatch;
 
-    [Header("Thresholds")]
-    [Range(0f, 1f)]
-    public float triggerThreshold = 0.7f;
+    // Tracks whether a mini-game is currently running.
+    public bool IsMiniGameActive { get; private set; } = false;
 
-    [Range(0f, 1f)]
-    public float resetThreshold = 0.4f;
-
-    private bool popupShown = false;
-
-    void Start()
+    private void Start()
     {
+        // The Reset Popup should not appear automatically.
         if (resetPopup != null)
             resetPopup.SetActive(false);
 
@@ -35,23 +30,14 @@ public class ResetPopupController : MonoBehaviour
             memoryMatch.SetActive(false);
     }
 
-    void Update()
+    // Called by StartPopupController after Okay is clicked.
+    public void ShowResetPopup()
     {
-        if (ocdMeter == null || resetPopup == null)
+        if (IsMiniGameActive)
             return;
 
-        if (!popupShown &&
-            ocdMeter.value >= triggerThreshold)
-        {
+        if (resetPopup != null)
             resetPopup.SetActive(true);
-            popupShown = true;
-        }
-
-        if (popupShown &&
-            ocdMeter.value <= resetThreshold)
-        {
-            popupShown = false;
-        }
     }
 
     public void PlayObjectHunt()
@@ -70,14 +56,40 @@ public class ResetPopupController : MonoBehaviour
             resetPopup.SetActive(false);
     }
 
-    void OpenGame(GameObject game, string gameName)
+    private void OpenGame(GameObject game, string gameName)
     {
+        if (game == null)
+        {
+            Debug.LogWarning(gameName + " is not assigned!");
+            return;
+        }
+
+        // Prevent the Reset Popup from reopening during gameplay.
+        IsMiniGameActive = true;
+
         if (resetPopup != null)
             resetPopup.SetActive(false);
 
-        if (game != null)
-            game.SetActive(true);
+        if (objectHunt != null)
+            objectHunt.SetActive(false);
+
+        if (memoryMatch != null)
+            memoryMatch.SetActive(false);
+
+        game.SetActive(true);
 
         Debug.Log("Selected game: " + gameName);
+    }
+
+    // Call this when a mini-game is completed or exited.
+    public void EndMiniGame()
+    {
+        if (objectHunt != null)
+            objectHunt.SetActive(false);
+
+        if (memoryMatch != null)
+            memoryMatch.SetActive(false);
+
+        IsMiniGameActive = false;
     }
 }
