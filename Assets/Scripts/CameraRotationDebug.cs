@@ -1,3 +1,4 @@
+
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,19 +12,42 @@ public class CameraRotationDebug : MonoBehaviour
     public float sensitivity = 0.1f;
     public Slider meter;
 
+    public GameObject Player;
+
+    [Header("UI Follow Camera")]
+    public Transform vrCamera;
+    public Vector3 cameraOffset = new Vector3(0f, 0f, 2f);
+    public float followSpeed = 5f;
+
     void Start()
     {
-        lastRotation = transform.eulerAngles;
+        lastRotation = Player.transform.eulerAngles;
     }
 
     void Update()
     {
-        Vector3 currentRotation = transform.eulerAngles;
+        // Make the UI follow the VR camera
+        if (vrCamera != null)
+        {
+            Vector3 targetPosition =
+                vrCamera.position + vrCamera.TransformDirection(cameraOffset);
+
+            transform.position = Vector3.Lerp(
+                transform.position,
+                targetPosition,
+                followSpeed * Time.deltaTime
+            );
+
+            transform.rotation = Quaternion.LookRotation(
+                transform.position - vrCamera.position
+            );
+        }
+
+        Vector3 currentRotation = Player.transform.eulerAngles;
 
         // Check if camera rotation has changed
         if (Vector3.Distance(currentRotation, lastRotation) > sensitivity)
         {
-            // Camera moved, reset timer
             timer = 0f;
             meter.value = 0f;
             hasPrinted = false;
@@ -32,9 +56,8 @@ public class CameraRotationDebug : MonoBehaviour
         }
         else
         {
-            // Camera has not moved
             timer += Time.deltaTime;
-            meter.value = timer / requiredTime;
+            meter.value = Mathf.Clamp01(timer / requiredTime);
 
             if (timer >= requiredTime && !hasPrinted)
             {
