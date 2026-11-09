@@ -122,7 +122,8 @@ public class MemoryMatchController : MonoBehaviour
             {
                 if (statusText != null)
                     statusText.text =
-                        "Well done! You found all the pairs!";
+                        "Well done!" +
+                        "You found all the pairs!";
             }
             else if (statusText != null)
             {
