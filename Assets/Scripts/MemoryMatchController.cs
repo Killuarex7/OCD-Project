@@ -11,6 +11,10 @@ public class MemoryMatchController : MonoBehaviour
     [Header("Assign Instruction Text")]
     public TMP_Text statusText;
 
+    [Header("End Game")]
+    public GameObject congratulationsText;
+    public float endScreenDuration = 3f;
+
     private string[] symbols =
     {
         "★", "●", "▲", "♥",
@@ -23,7 +27,9 @@ public class MemoryMatchController : MonoBehaviour
     private int firstCard = -1;
     private int secondCard = -1;
     private int matchesFound = 0;
+
     private bool waiting = false;
+    private bool gameFinished = false;
 
     void Start()
     {
@@ -38,11 +44,13 @@ public class MemoryMatchController : MonoBehaviour
 
         ShuffleSymbols();
 
+        if (congratulationsText != null)
+            congratulationsText.SetActive(false);
+
         for (int i = 0; i < 8; i++)
         {
             int index = i;
 
-            // Create a symbol label on each card.
             GameObject labelObject = new GameObject(
                 "CardSymbol",
                 typeof(RectTransform),
@@ -67,10 +75,10 @@ public class MemoryMatchController : MonoBehaviour
             labels[i].alignment = TextAlignmentOptions.Center;
             labels[i].color = Color.black;
             labels[i].raycastTarget = false;
-
             labels[i].text = "?";
 
             cardButtons[i].onClick.RemoveAllListeners();
+
             cardButtons[i].onClick.AddListener(
                 () => FlipCard(index));
         }
@@ -93,11 +101,18 @@ public class MemoryMatchController : MonoBehaviour
 
     void FlipCard(int index)
     {
-        if (waiting || matched[index])
+        if (waiting || gameFinished || matched[index])
             return;
 
         if (index == firstCard)
             return;
+
+        // Play card clicking sound
+        AudioManager audio =
+            FindFirstObjectByType<AudioManager>();
+
+        if (audio != null)
+            audio.PlayClick();
 
         labels[index].text = symbols[index];
 
@@ -113,6 +128,7 @@ public class MemoryMatchController : MonoBehaviour
         {
             matched[firstCard] = true;
             matched[secondCard] = true;
+
             matchesFound++;
 
             firstCard = -1;
@@ -120,9 +136,7 @@ public class MemoryMatchController : MonoBehaviour
 
             if (matchesFound == 4)
             {
-                if (statusText != null)
-                    statusText.text =
-                        "Well done! You found all the pairs!";
+                StartCoroutine(EndGame());
             }
             else if (statusText != null)
             {
@@ -150,9 +164,35 @@ public class MemoryMatchController : MonoBehaviour
 
         firstCard = -1;
         secondCard = -1;
+
         waiting = false;
 
         if (statusText != null)
             statusText.text = "Find all 4 matching pairs!";
+    }
+
+    IEnumerator EndGame()
+    {
+        gameFinished = true;
+
+        // Play winning sound
+        AudioManager audio =
+            FindFirstObjectByType<AudioManager>();
+
+        if (audio != null)
+            audio.PlayWin();
+
+        if (statusText != null)
+            statusText.gameObject.SetActive(false);
+
+        foreach (Button card in cardButtons)
+            card.gameObject.SetActive(false);
+
+        if (congratulationsText != null)
+            congratulationsText.SetActive(true);
+
+        yield return new WaitForSeconds(endScreenDuration);
+
+        gameObject.SetActive(false);
     }
 }
