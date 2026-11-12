@@ -2,15 +2,21 @@ using UnityEngine;
 
 public class ObjectHuntTarget : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public string objectName;
+
+    public void SelectTarget()
     {
-        
+        ObjectHuntController controller =
+            FindFirstObjectByType<ObjectHuntController>();
+
+        if (controller != null)
+        {
+            controller.CheckObject(this);
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnMouseDown()
     {
-        
+        SelectTarget();
     }
 }

@@ -446,6 +446,19 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &134168074
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 134168072}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bda7685a17a14904a90686f887f8f57a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ObjectHuntTarget
+  objectName: Playstation
 --- !u!1 &143735720
 GameObject:
   m_ObjectHideFlags: 0
@@ -2107,6 +2120,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 545929f5b6bc95c42b252f07f6936172, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1845681341}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 545929f5b6bc95c42b252f07f6936172, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1845681342}
   m_SourcePrefab: {fileID: 100100000, guid: 545929f5b6bc95c42b252f07f6936172, type: 3}
 --- !u!1001 &441845106
 PrefabInstance:
@@ -3847,6 +3863,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 8b2cb53247f8e844e8c0f8a716499179, type: 3}
       insertIndex: -1
       addedObject: {fileID: 738163034}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 8b2cb53247f8e844e8c0f8a716499179, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 738163035}
   m_SourcePrefab: {fileID: 100100000, guid: 8b2cb53247f8e844e8c0f8a716499179, type: 3}
 --- !u!1 &738163033 stripped
 GameObject:
@@ -3874,6 +3893,19 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &738163035
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 738163033}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bda7685a17a14904a90686f887f8f57a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ObjectHuntTarget
+  objectName: ashtray
 --- !u!1 &756016608 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -516098083770646512, guid: d639a7ed9c8d1f04e8d397a744f8f5b7, type: 3}
@@ -4390,6 +4422,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 091c53d0dae4fb941ba6cb6197a99c42, type: 3}
       insertIndex: -1
       addedObject: {fileID: 800801435}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 091c53d0dae4fb941ba6cb6197a99c42, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 800801436}
   m_SourcePrefab: {fileID: 100100000, guid: 091c53d0dae4fb941ba6cb6197a99c42, type: 3}
 --- !u!1 &800801434 stripped
 GameObject:
@@ -4417,6 +4452,19 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &800801436
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 800801434}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bda7685a17a14904a90686f887f8f57a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ObjectHuntTarget
+  objectName: SaladBox
 --- !u!1 &812126039 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -5568371526223589888, guid: d639a7ed9c8d1f04e8d397a744f8f5b7, type: 3}
@@ -5355,6 +5403,7 @@ GameObject:
   - component: {fileID: 1063420244}
   - component: {fileID: 1063420246}
   - component: {fileID: 1063420245}
+  - component: {fileID: 1063420247}
   m_Layer: 5
   m_Name: ObjectHuntGame
   m_TagString: Untagged
@@ -5423,6 +5472,25 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1063420243}
   m_CullTransparentMesh: 1
+--- !u!114 &1063420247
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1063420243}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26996261943e6864191d9fb46057cc94, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ObjectHuntController
+  targetText: {fileID: 238560819}
+  feedbackText: {fileID: 180201531}
+  huntTargets:
+  - {fileID: 738163035}
+  - {fileID: 134168074}
+  - {fileID: 800801436}
+  - {fileID: 1845681342}
 --- !u!1 &1137858663
 GameObject:
   m_ObjectHideFlags: 0
@@ -7049,6 +7117,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 12f7b341d524efa40bd9795b7f9a9d8e, type: 3}
       insertIndex: -1
       addedObject: {fileID: 134168073}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 12f7b341d524efa40bd9795b7f9a9d8e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 134168074}
   m_SourcePrefab: {fileID: 100100000, guid: 12f7b341d524efa40bd9795b7f9a9d8e, type: 3}
 --- !u!1 &1574718903
 GameObject:
@@ -8221,6 +8292,19 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1845681342
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1845681340}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bda7685a17a14904a90686f887f8f57a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ObjectHuntTarget
+  objectName: Bin
 --- !u!4 &1915920866 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6189354538098044173, guid: 2fd3e07afe5b461490fb8e314976b1b0, type: 3}
