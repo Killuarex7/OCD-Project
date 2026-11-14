@@ -1086,7 +1086,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ResetPopupController
   ocdMeter: {fileID: 1616215903}
   resetPopup: {fileID: 1280060574}
-  objectHunt: {fileID: 1513877169}
+  objectHunt: {fileID: 1063420243}
   memoryMatch: {fileID: 916658705}
 --- !u!114 &251052297
 MonoBehaviour:
@@ -6004,7 +6004,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1280060575
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6572,7 +6572,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1458210736
 MonoBehaviour:
   m_ObjectHideFlags: 0
