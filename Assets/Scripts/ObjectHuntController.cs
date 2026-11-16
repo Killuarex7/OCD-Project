@@ -1,3 +1,4 @@
+
 using UnityEngine;
 using TMPro;
 using System.Collections;
@@ -12,115 +13,182 @@ public class ObjectHuntController : MonoBehaviour
     [Header("Objects to Find")]
     public ObjectHuntTarget[] huntTargets;
 
-    private ObjectHuntTarget currentTarget;
+    [Header("Hiding Locations")]
+    public Transform[] hideSpots;
 
+    [Header("VR Gaze Detection")]
+    public Transform vrCamera;
+    public float gazeDistance = 10f;
+
+    [Header("Game Settings")]
+    public float memoryDuration = 5f;
+    public float searchDuration = 20f;
+    public float nextRoundDelay = 2f;
+    public int roundsToWin = 3;
+
+    private ObjectHuntTarget currentTarget;
     private List<ObjectHuntTarget> remainingTargets =
         new List<ObjectHuntTarget>();
 
-    private int roundsCompleted = 0;
-    private int roundsToWin = 3;
-    private bool canSelect = true;
+    private Vector3 originalPosition;
+    private Quaternion originalRotation;
+    private Transform originalParent;
+
+    private bool isSearching;
+    private bool lookedAtTarget;
+    private bool roundWon;
 
     private void OnEnable()
     {
         StartGame();
     }
 
+    private void Update()
+    {
+        if (!isSearching || currentTarget == null || vrCamera == null)
+            return;
+
+        Ray gazeRay = new Ray(vrCamera.position, vrCamera.forward);
+
+        if (Physics.Raycast(
+            gazeRay,
+            out RaycastHit hit,
+            gazeDistance,
+            Physics.DefaultRaycastLayers,
+            QueryTriggerInteraction.Ignore))
+        {
+            ObjectHuntTarget seenTarget =
+                hit.collider.GetComponentInParent<ObjectHuntTarget>();
+
+            if (seenTarget == currentTarget)
+            {
+                lookedAtTarget = true;
+            }
+        }
+    }
+
     public void StartGame()
     {
         StopAllCoroutines();
-
-        roundsCompleted = 0;
-        canSelect = true;
+        RestoreCurrentTarget();
 
         remainingTargets.Clear();
 
         foreach (ObjectHuntTarget target in huntTargets)
         {
             if (target != null)
-            {
                 remainingTargets.Add(target);
-            }
+        }
+
+        if (targetText == null || feedbackText == null)
+        {
+            Debug.LogError("Assign the Object Hunt UI Text fields!");
+            return;
+        }
+
+        if (vrCamera == null)
+        {
+            Debug.LogError("Assign the VR Main Camera!");
+            return;
+        }
+
+        if (hideSpots == null || hideSpots.Length == 0)
+        {
+            Debug.LogError("Assign your hiding spots!");
+            return;
         }
 
         if (remainingTargets.Count < roundsToWin)
         {
-            Debug.LogError("Add at least 3 hunt targets!");
+            Debug.LogError("Not enough hunt targets!");
             return;
         }
 
-        feedbackText.text = "";
-        ChooseNextTarget();
+        StartCoroutine(GameRoutine());
     }
 
-    private void ChooseNextTarget()
+    private IEnumerator GameRoutine()
     {
-        if (remainingTargets.Count == 0)
+        for (int round = 0; round < roundsToWin; round++)
         {
-            FinishGame();
-            return;
+            // MEMORY PHASE
+            feedbackText.text = "Remember where everything is!";
+
+            float memoryTimer = memoryDuration;
+
+            while (memoryTimer > 0)
+            {
+                targetText.text =
+                    "Memorise the room: " +
+                    Mathf.CeilToInt(memoryTimer);
+
+                memoryTimer -= Time.deltaTime;
+                yield return null;
+            }
+
+            // SELECT A RANDOM OBJECT
+            int targetIndex =
+                Random.Range(0, remainingTargets.Count);
+
+            currentTarget = remainingTargets[targetIndex];
+            remainingTargets.RemoveAt(targetIndex);
+
+            // SAVE ORIGINAL POSITION
+            originalPosition = currentTarget.transform.position;
+            originalRotation = currentTarget.transform.rotation;
+            originalParent = currentTarget.transform.parent;
+
+            // SELECT A RANDOM HIDING SPOT
+            Transform hideSpot =
+                hideSpots[Random.Range(0, hideSpots.Length)];
+
+            if (hideSpot == null)
+            {
+                Debug.LogError("A hiding spot is missing!");
+                yield break;
+            }
+
+            // MOVE THE OBJECT
+            currentTarget.transform.position = hideSpot.position;
+            currentTarget.transform.rotation = hideSpot.rotation;
+
+            // SEARCH PHASE
+            lookedAtTarget = false;
+            roundWon = false;
+            isSearching = true;
+
+            feedbackText.text = "Look around and find what is missing!";
+
+            float searchTimer = searchDuration;
+
+            while (searchTimer > 0 && !roundWon)
+            {
+                targetText.text =
+                    "Find the missing object: " +
+                    Mathf.CeilToInt(searchTimer) + "s";
+
+                searchTimer -= Time.deltaTime;
+                yield return null;
+            }
+
+            isSearching = false;
+
+            if (roundWon)
+            {
+                feedbackText.text = "Correct! You found it!";
+            }
+            else
+            {
+                feedbackText.text = "Time's up! Keep practising.";
+            }
+
+            yield return new WaitForSeconds(nextRoundDelay);
+
+            RestoreCurrentTarget();
         }
-
-        int randomIndex = Random.Range(0, remainingTargets.Count);
-
-        currentTarget = remainingTargets[randomIndex];
-
-        remainingTargets.RemoveAt(randomIndex);
-
-        targetText.text = "Find: " + currentTarget.objectName;
-        feedbackText.text = "Look around the room!";
-
-        canSelect = true;
-    }
-
-    public void CheckObject(ObjectHuntTarget selectedObject)
-    {
-        if (!canSelect || currentTarget == null)
-            return;
-
-        AudioManager audio =
-            FindFirstObjectByType<AudioManager>();
-
-        if (audio != null)
-            audio.PlayClick();
-
-        if (selectedObject == currentTarget)
-        {
-            canSelect = false;
-
-            roundsCompleted++;
-
-            feedbackText.text = "Correct! Well done!";
-
-            StartCoroutine(NextRound());
-        }
-        else
-        {
-            feedbackText.text = "Not quite! Keep looking.";
-        }
-    }
-
-    private IEnumerator NextRound()
-    {
-        yield return new WaitForSeconds(1.5f);
-
-        if (roundsCompleted >= roundsToWin)
-        {
-            FinishGame();
-        }
-        else
-        {
-            ChooseNextTarget();
-        }
-    }
-
-    private void FinishGame()
-    {
-        canSelect = false;
 
         targetText.text = "Game Complete!";
-        feedbackText.text =
-            "Congratulations! You found all the objects!";
+        feedbackText.text = "You completed the Object Hunt!";
 
         AudioManager audio =
             FindFirstObjectByType<AudioManager>();
@@ -128,13 +196,50 @@ public class ObjectHuntController : MonoBehaviour
         if (audio != null)
             audio.PlayWin();
 
-        StartCoroutine(CloseGame());
-    }
-
-    private IEnumerator CloseGame()
-    {
         yield return new WaitForSeconds(3f);
 
         gameObject.SetActive(false);
+    }
+
+    // Connect this method to the I Found It! UI button.
+    public void ConfirmFound()
+    {
+        if (!isSearching)
+            return;
+
+        if (lookedAtTarget)
+        {
+            roundWon = true;
+
+            AudioManager audio =
+                FindFirstObjectByType<AudioManager>();
+
+            if (audio != null)
+                audio.PlayClick();
+        }
+        else
+        {
+            feedbackText.text =
+                "Not yet! Look directly at the missing object first.";
+        }
+    }
+
+    private void RestoreCurrentTarget()
+    {
+        if (currentTarget == null)
+            return;
+
+        currentTarget.transform.SetParent(originalParent, true);
+        currentTarget.transform.position = originalPosition;
+        currentTarget.transform.rotation = originalRotation;
+
+        currentTarget = null;
+    }
+
+    private void OnDisable()
+    {
+        isSearching = false;
+        StopAllCoroutines();
+        RestoreCurrentTarget();
     }
 }
