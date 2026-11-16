@@ -1,6 +1,8 @@
-
 using UnityEngine;
 
+// Keeps a UI panel floating in front of the player's head.
+// When a wall or object is too close, the panel fades out (via a CanvasGroup
+// added automatically) instead of being disabled, so this script keeps running.
 public class HeadFollowUI : MonoBehaviour
 {
     [Header("VR Camera")]
@@ -17,44 +19,52 @@ public class HeadFollowUI : MonoBehaviour
     [Header("Obstacle Detection")]
     public LayerMask obstacleLayers = ~0;
 
+    private CanvasGroup canvasGroup;
+    private bool isShown = true;
+
+    private void Awake()
+    {
+        canvasGroup = GetComponent<CanvasGroup>();
+
+        if (canvasGroup == null)
+            canvasGroup = gameObject.AddComponent<CanvasGroup>();
+    }
+
+    private void OnEnable()
+    {
+        SetShown(true);
+    }
+
     private void LateUpdate()
     {
-        if (vrCamera == null)
-            return;
+        if (vrCamera == null) return;
 
         float targetDistance = desiredDistance;
 
-        // Detect walls and objects in front of the camera.
-        if (Physics.Raycast(
-            vrCamera.position,
-            vrCamera.forward,
-            out RaycastHit hit,
-            desiredDistance,
-            obstacleLayers))
+        if (Physics.Raycast(vrCamera.position, vrCamera.forward,
+            out RaycastHit hit, desiredDistance, obstacleLayers,
+            QueryTriggerInteraction.Ignore))
         {
             targetDistance = hit.distance - obstaclePadding;
         }
 
-        // Hide the UI if an obstacle is too close.
-        bool shouldShow = targetDistance >= minimumDistance;
+        SetShown(targetDistance >= minimumDistance);
 
-        if (gameObject.activeSelf != shouldShow)
-            gameObject.SetActive(shouldShow);
+        targetDistance = Mathf.Clamp(targetDistance, minimumDistance, desiredDistance);
 
-        if (!shouldShow)
+        Vector3 targetPosition = vrCamera.position + vrCamera.forward * targetDistance;
+        transform.position = Vector3.Lerp(transform.position, targetPosition, followSpeed * Time.deltaTime);
+        transform.rotation = vrCamera.rotation;
+    }
+
+    private void SetShown(bool show)
+    {
+        if (canvasGroup == null || isShown == show)
             return;
 
-        targetDistance = Mathf.Min(targetDistance, desiredDistance);
-
-        Vector3 targetPosition =
-            vrCamera.position + vrCamera.forward * targetDistance;
-
-        transform.position = Vector3.Lerp(
-            transform.position,
-            targetPosition,
-            followSpeed * Time.deltaTime
-        );
-
-        transform.rotation = vrCamera.rotation;
+        isShown = show;
+        canvasGroup.alpha = show ? 1f : 0f;
+        canvasGroup.interactable = show;
+        canvasGroup.blocksRaycasts = show;
     }
 }
